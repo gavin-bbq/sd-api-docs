@@ -1,18 +1,18 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Stable Diffusion Adapter API",
-    "description": "Generate concept images for industrial design from text prompts",
+    "title": "Replicate Stable Diffusion XL API",
+    "description": "Generate concept images using Stable Diffusion XL via Replicate",
     "version": "1.0.0"
   },
   "servers": [
-    { "url": "https://your-adapter-domain.example.com" }
+    { "url": "https://api.replicate.com/v1" }
   ],
   "paths": {
-    "/generate": {
+    "/predictions": {
       "post": {
-        "summary": "Generate image from text prompt",
-        "operationId": "generateImage",
+        "summary": "Generate image with Stable Diffusion XL",
+        "operationId": "generateSDXLImage",
         "security": [{ "ApiKeyAuth": [] }],
         "requestBody": {
           "required": true,
@@ -21,34 +21,38 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "prompt": {
+                  "version": {
                     "type": "string",
-                    "description": "Text prompt describing the product concept"
+                    "description": "Model version ID for SDXL",
+                    "example": "e6d7b52a2d68d6e6a0ad50cddf0c6a43cbf2163e1a4a6e77d6f5b8d98c4b6c02"
                   },
-                  "width": { "type": "integer", "default": 1024 },
-                  "height": { "type": "integer", "default": 1024 },
-                  "steps": { "type": "integer", "default": 40 },
-                  "cfg": { "type": "number", "default": 6.5 },
-                  "negative": { "type": "string" },
-                  "seed": { "type": "integer" }
+                  "input": {
+                    "type": "object",
+                    "properties": {
+                      "prompt": { "type": "string", "description": "Text prompt" },
+                      "width": { "type": "integer", "default": 1024 },
+                      "height": { "type": "integer", "default": 1024 },
+                      "negative_prompt": { "type": "string" }
+                    },
+                    "required": ["prompt"]
+                  }
                 },
-                "required": ["prompt"]
+                "required": ["version", "input"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Image generated successfully",
+            "description": "Image generation successful",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "image_url": {
-                      "type": "string",
-                      "format": "uri",
-                      "description": "URL of generated image"
+                    "output": {
+                      "type": "array",
+                      "items": { "type": "string", "format": "uri" }
                     }
                   }
                 }
@@ -64,7 +68,7 @@
       "ApiKeyAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "x-api-key"
+        "name": "Authorization"
       }
     }
   }

@@ -30,7 +30,7 @@
                   "version": {
                     "type": "string",
                     "description": "Model version ID for SDXL",
-                    "example": "e6d7b52a2d68d6e6a0ad50cddf0c6a43cbf2163e1a4a6e77df5b8d98c4b6c02"
+                    "example": "5c7c5dc52c621c70d0c825c16dfd5c623ad0bdfd8f0f71f1b09f63d0a6b1e566"
                   },
                   "input": {
                     "type": "object",
@@ -111,3 +111,4 @@
     "schemas": {}
   }
 }
+

@@ -1,0 +1,71 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Stable Diffusion Adapter API",
+    "description": "Generate concept images for industrial design from text prompts",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "https://your-adapter-domain.example.com" }
+  ],
+  "paths": {
+    "/generate": {
+      "post": {
+        "summary": "Generate image from text prompt",
+        "operationId": "generateImage",
+        "security": [{ "ApiKeyAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "prompt": {
+                    "type": "string",
+                    "description": "Text prompt describing the product concept"
+                  },
+                  "width": { "type": "integer", "default": 1024 },
+                  "height": { "type": "integer", "default": 1024 },
+                  "steps": { "type": "integer", "default": 40 },
+                  "cfg": { "type": "number", "default": 6.5 },
+                  "negative": { "type": "string" },
+                  "seed": { "type": "integer" }
+                },
+                "required": ["prompt"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Image generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "image_url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL of generated image"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    }
+  }
+}

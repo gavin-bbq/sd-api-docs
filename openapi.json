@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.1",
   "info": {
     "title": "Replicate Stable Diffusion XL API",
     "description": "Generate concept images using Stable Diffusion XL via Replicate",
@@ -73,3 +73,4 @@
     }
   }
 }
+

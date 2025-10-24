@@ -1,19 +1,25 @@
 {
   "openapi": "3.1.1",
   "info": {
-    "title": "Replicate Stable Diffusion XL API",
-    "description": "Generate concept images using Stable Diffusion XL via Replicate",
+    "title": "Stable Diffusion XL Adapter API",
+    "description": "Generate images using Replicate's SDXL model for industrial design visualization",
     "version": "1.0.0"
   },
   "servers": [
-    { "url": "https://api.replicate.com/v1" }
+    {
+      "url": "https://api.replicate.com/v1"
+    }
   ],
   "paths": {
     "/predictions": {
       "post": {
         "summary": "Generate image with Stable Diffusion XL",
         "operationId": "generateSDXLImage",
-        "security": [{ "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -24,15 +30,39 @@
                   "version": {
                     "type": "string",
                     "description": "Model version ID for SDXL",
-                    "example": "e6d7b52a2d68d6e6a0ad50cddf0c6a43cbf2163e1a4a6e77d6f5b8d98c4b6c02"
+                    "example": "e6d7b52a2d68d6e6a0ad50cddf0c6a43cbf2163e1a4a6e77df5b8d98c4b6c02"
                   },
                   "input": {
                     "type": "object",
                     "properties": {
-                      "prompt": { "type": "string", "description": "Text prompt" },
-                      "width": { "type": "integer", "default": 1024 },
-                      "height": { "type": "integer", "default": 1024 },
-                      "negative_prompt": { "type": "string" }
+                      "prompt": {
+                        "type": "string",
+                        "description": "Prompt describing the industrial design concept"
+                      },
+                      "width": {
+                        "type": "integer",
+                        "default": 1024
+                      },
+                      "height": {
+                        "type": "integer",
+                        "default": 1024
+                      },
+                      "num_inference_steps": {
+                        "type": "integer",
+                        "default": 40
+                      },
+                      "guidance_scale": {
+                        "type": "number",
+                        "default": 7.5
+                      },
+                      "negative_prompt": {
+                        "type": "string",
+                        "description": "Things to avoid in the image"
+                      },
+                      "seed": {
+                        "type": "integer",
+                        "description": "Optional random seed for reproducibility"
+                      }
                     },
                     "required": ["prompt"]
                   }
@@ -44,15 +74,21 @@
         },
         "responses": {
           "200": {
-            "description": "Image generation successful",
+            "description": "Image generated successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "output": {
-                      "type": "array",
-                      "items": { "type": "string", "format": "uri" }
+                    "urls": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "URL for prediction status"
+                        }
+                      }
                     }
                   }
                 }
@@ -68,9 +104,10 @@
       "ApiKeyAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "Authorization"
+        "name": "Authorization",
+        "description": "Bearer YOUR_REPLICATE_API_TOKEN"
       }
-    }
+    },
+    "schemas": {}
   }
 }
-
